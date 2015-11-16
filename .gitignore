@@ -79,6 +79,9 @@ pip-selfcheck.json
 *.pyc
 __pycache__/
 local_settings.py
+example/project.db
+example/media
+example/html
 
 
 ### Vim ###
