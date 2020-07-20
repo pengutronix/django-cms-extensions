@@ -1,9 +1,11 @@
-from cms.admin.pageadmin import PageAdmin as _PageAdmin
-from cms.models import Page
+from django.shortcuts import redirect, get_object_or_404
+from django.utils.translation import ugettext_lazy as _
 from django.contrib import admin, messages
 from django.conf.urls import url
-from django.utils.translation import ugettext_lazy as _
-from django.shortcuts import redirect, get_object_or_404
+
+from cms.admin.pageadmin import PageAdmin as _PageAdmin
+from cms.models import Page
+
 from .utils import export_page
 
 
@@ -20,6 +22,7 @@ class PageAdmin(_PageAdmin):
         return [
             url(r'^([0-9]+)/export/$', self.export, name='cms_page_export'),
         ] + super(PageAdmin, self).get_urls()
+
 
 admin.site.unregister(Page)
 admin.site.register(Page, PageAdmin)

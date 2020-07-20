@@ -1,7 +1,9 @@
-from django.dispatch import receiver
 from django.db.models.signals import pre_delete
-from cms.models.pagemodel import Page
+from django.dispatch import receiver
+
 from cms.signals import post_publish, post_unpublish
+from cms.models.pagemodel import Page
+
 from .utils import export_page, delete_exported_page
 from . import app_settings
 

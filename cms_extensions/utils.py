@@ -1,11 +1,11 @@
+import os
+
 from django.test import RequestFactory
 from django.contrib.auth.models import AnonymousUser
 from django.contrib.sessions.middleware import SessionMiddleware
-from django.template import RequestContext
 from django.template.response import TemplateResponse
-from cms.utils import get_template_from_request
+
 from . import app_settings
-import os
 
 
 class CMSRequestFactory(RequestFactory):
@@ -34,12 +34,14 @@ def page_to_html(page, language=None, encoding='utf-8'):
     request.current_page = page
 
     # generate request context
-    context = RequestContext(request)
-    context['lang'] = language or app_settings.DEFAULT_LANGUAGE
-    context['current_page'] = page
+    context = {
+        'request': request,
+        'lang': language or app_settings.DEFAULT_LANGUAGE,
+        'current_page': page,
+    }
 
     # generate template response
-    template_name = get_template_from_request(request, page)
+    template_name = page.get_template()
     response = TemplateResponse(request, template_name, context)
     response.render()
 
@@ -54,7 +56,7 @@ def page_to_file_name(page, export_root=app_settings.EXPORT_ROOT,
 
     url = '%s/%s' % (language, page.get_path(language=language))
 
-    return os.path.join(export_root, page.site.name, url, 'index.html')
+    return os.path.join(export_root, page.node.site.name, url, 'index.html')
 
 
 def export_page(page, export_root=app_settings.EXPORT_ROOT,
@@ -79,7 +81,7 @@ def delete_exported_page(page, export_root=app_settings.EXPORT_ROOT,
         os.remove(file_name)
 
     delete_orphaned_directorys(os.path.join(app_settings.EXPORT_ROOT,
-                                            page.site.name))
+                                            page.node.site.name))
 
 
 def delete_orphaned_directorys(root):
