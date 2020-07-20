@@ -4,7 +4,7 @@
 from setuptools import setup
 
 setup(name='django-cms-extensions',
-      version='0.1.0',
+      version='0.2',
       description='Useful extensions for Django CMS',
       url='https://github.com/pengutronix/django-cms-extensions',
       author='Florian Scherf',
